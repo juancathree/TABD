@@ -139,7 +139,10 @@ CREATE OR REPLACE TYPE Participante AS OBJECT
     MEMBER PROCEDURE setDni(dni IN VARCHAR),
     MEMBER PROCEDURE setNacimiento(nac IN DATE),
     MEMBER PROCEDURE setDomicilio(domicilio IN VARCHAR),
-    MEMBER PROCEDURE setEmail(email IN VARCHAR)
+    MEMBER PROCEDURE setEmail(email IN VARCHAR),
+
+    MEMBER FUNCTION getEdicionesInscritas RETURN Lista_Ref_Ediciones,
+    MEMBER PROCEDURE setEdicion(refEdicion IN REF Edicion)
 
 ) NOT FINAL;
 /
@@ -239,7 +242,6 @@ CREATE OR REPLACE TYPE BODY Amateur AS
         BEGIN
             self.Fotografia := foto;
         END;
-
 END;
 /
 
@@ -269,7 +271,6 @@ CREATE OR REPLACE TYPE BODY Profesional AS
         BEGIN
             self.curriculum := curriculum;
         END;
-
 END;
 /
 
@@ -298,7 +299,10 @@ CREATE OR REPLACE TYPE Organizador AS OBJECT
     MEMBER PROCEDURE setNombre(nombre IN VARCHAR),
     MEMBER PROCEDURE setApellidos(apellidos IN VARCHAR),
     MEMBER PROCEDURE setNacimiento(nac IN DATE),
-    MEMBER PROCEDURE setDni(dni IN VARCHAR)
+    MEMBER PROCEDURE setDni(dni IN VARCHAR),
+
+    MEMBER FUNCTION getEdicionesOrganizadas RETURN Lista_Ref_Ediciones,
+    MEMBER PROCEDURE setEdicion(refEdicion IN REF Edicion)
 );
 /
 
@@ -372,7 +376,13 @@ CREATE OR REPLACE TYPE Edicion AS OBJECT
     MEMBER FUNCTION getInicio RETURN DATE,
     MEMBER FUNCTION getFin RETURN DATE,
     MEMBER PROCEDURE setInicio(inicio IN DATE),
-    MEMBER PROCEDURE setFin(fin IN DATE)
+    MEMBER PROCEDURE setFin(fin IN DATE),
+
+    MEMBER FUNCTION getParticipantes RETURN Lista_Ref_Participantes,
+    MEMBER PROCEDURE setParticipante(refParticipante IN REF Participante),
+    MEMBER FUNCTION getOrganizadores RETURN Lista_Ref_Organizadores,
+    MEMBER PROCEDURE setOrganizador(refOrganizador IN REF Organizador),
+    MEMBER FUNCTION getTorneo RETURN REF Torneo
 );
 /
 
@@ -432,7 +442,12 @@ CREATE OR REPLACE TYPE Torneo AS OBJECT
     MEMBER FUNCTION getTitulo RETURN VARCHAR,
     MEMBER FUNCTION getReglas RETURN CLOB,
     MEMBER PROCEDURE setTitulo(titulo IN VARCHAR),
-    MEMBER PROCEDURE setReglas(reglas IN CLOB)
+    MEMBER PROCEDURE setReglas(reglas IN CLOB),
+
+    MEMBER FUNCTION getVideojuego RETURN REF Videojuego,
+    MEMBER PROCEDURE setVideojuego(refVid IN REF Videojuego),
+    MEMBER FUNCTION getEdiciones RETURN Lista_Ediciones,
+    MEMBER PROCEDURE setEdicion(ed IN Edicion)
 );
 /
 
