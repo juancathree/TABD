@@ -47,7 +47,6 @@ CREATE OR REPLACE TYPE Videojuego AS OBJECT
     Dispositivos ListaDispositivos,
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarVideojuego(),
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getTitulo RETURN VARCHAR,
     MEMBER FUNCTION getPrecio RETURN NUMBER,
@@ -59,71 +58,56 @@ CREATE OR REPLACE TYPE Videojuego AS OBJECT
     MEMBER PROCEDURE setDispositivos(dispositivos IN ListaDispositivos)
 );
 /
+show errors;
 
 CREATE OR REPLACE TYPE BODY Videojuego AS
 
-    MEMBER PROCEDURE borrarVideojuego() IS
-        BEGIN
-            DELETE from Videojuego
-            where Id = SELF.Id;
-        END;
-
-    MEMBER FUNCTION getId RETURNS NUMBER IS 
+    MEMBER FUNCTION getId RETURN NUMBER IS 
         BEGIN   
             RETURN SELF.Id;
         END;
 
-    MEMBER FUNCTION getTitulo RETURNS VARCHAR IS
+    MEMBER FUNCTION getTitulo RETURN VARCHAR IS
         BEGIN
             RETURN SELF.Titulo;
         END;
 
-    MEMBER FUNCTION getPrecio RETURNS NUMBER IS
+    MEMBER FUNCTION getPrecio RETURN NUMBER IS
         BEGIN
             RETURN SELF.Precio;
         END;
     
-    MEMBER FUNCTION getAnio RETURNS NUMBER IS
+    MEMBER FUNCTION getAnio RETURN NUMBER IS
         BEGIN
             RETURN SELF.Anio;
         END;
 
-    MEMBER FUNCTION getDispositivos RETURNS ListaDispositivos IS
+    MEMBER FUNCTION getDispositivos RETURN ListaDispositivos IS
         BEGIN
             RETURN SELF.Dispositivos;
         END;
 
     MEMBER PROCEDURE setTitulo(titulo IN VARCHAR) IS 
         BEGIN
-            UPDATE Videojuego
-            SET Titulo = titulo
-            WHERE Id = SELF.Id;
+            self.titulo := titulo;
         END;
 
     MEMBER PROCEDURE setPrecio(precio IN NUMBER) IS
         BEGIN
-            UPDATE Videojuego
-            SET Precio = precio
-            WHERE Id = SELF.Id;
+            self.precio := precio;
         END;
 
     MEMBER PROCEDURE setAnio(anio IN NUMBER) IS
         BEGIN
-            UPDATE Videojuego
-            SET Anio = anio
-            WHERE Id = SELF.Id;
+            self.anio := anio;
         END;
 
     MEMBER PROCEDURE setDispositivos(dispositivos IN ListaDispositivos) IS
         BEGIN
-            UPDATE Videojuego
-            SET Dispositivos = dispositivos
-            WHERE Id = SELF.Id;
+            self.dispositivos := dispositivos;
         END;
-
 END;
 /
-
 show errors;
 
 /* Tipo Participante */
@@ -143,7 +127,6 @@ CREATE OR REPLACE TYPE Participante AS OBJECT
     Inscrito_En Lista_Ref_Ediciones,
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarParticipante(),
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getNombre RETURN VARCHAR,
     MEMBER FUNCTION getApellidos RETURN VARCHAR,
@@ -163,12 +146,6 @@ CREATE OR REPLACE TYPE Participante AS OBJECT
 
 CREATE OR REPLACE TYPE BODY Participante AS
 
-    MEMBER PROCEDURE borrarParticipante() IS
-        BEGIN
-            DELETE from Participante
-            where Id = SELF.Id;
-        END;
-
     MEMBER FUNCTION getId RETURN NUMBER IS
         BEGIN
             RETURN SELF.Id;
@@ -184,7 +161,7 @@ CREATE OR REPLACE TYPE BODY Participante AS
             RETURN SELF.Apellidos;
         END;
 
-    MEMBER FUNCTION getDni RETURN NUMBER IS
+    MEMBER FUNCTION getDni RETURN VARCHAR IS
         BEGIN
             RETURN SELF.Dni;
         END;
@@ -194,9 +171,9 @@ CREATE OR REPLACE TYPE BODY Participante AS
             RETURN SELF.Nacimiento;
         END;
 
-    MEMBER FUNCTION getDomicilo RETURN VARCHAR IS
+    MEMBER FUNCTION getDomicilio RETURN VARCHAR IS
         BEGIN
-            RETURN SELF.Domicilo;
+            RETURN SELF.Domicilio;
         END;
 
     MEMBER FUNCTION getEmail RETURN VARCHAR IS
@@ -206,44 +183,32 @@ CREATE OR REPLACE TYPE BODY Participante AS
 
     MEMBER PROCEDURE setNombre(nombre IN VARCHAR) IS
         BEGIN
-            UPDATE Participante
-            SET Nombre = nombre
-            WHERE Id = SELF.Id;
+            self.nombre := nombre;
         END;
 
     MEMBER PROCEDURE setApellidos(apellidos IN VARCHAR) IS
         BEGIN
-            UPDATE Participante
-            SET Apellidos = apellidos
-            WHERE Id = SELF.Id;
+            self.apellidos := apellidos;
         END;
 
     MEMBER PROCEDURE setDni(dni IN VARCHAR) IS 
         BEGIN
-            UPDATE Participante
-            SET Dni = dni
-            WHERE Id = SELF.Id;
+            self.dni := dni;
         END;
 
     MEMBER PROCEDURE setNacimiento(nac IN DATE) IS
         BEGIN
-            UPDATE Participante
-            SET Nacimiento = nac
-            WHERE Id = SELF.Id;
+            self.nacimiento := nac;
         END;
 
     MEMBER PROCEDURE setDomicilio(domicilio IN VARCHAR) IS
         BEGIN
-            UPDATE Participante
-            SET Domicilio = domicilio
-            WHERE Id = SELF.Id;
+            self.domicilio := domicilio;
         END;
 
     MEMBER PROCEDURE setEmail(email IN VARCHAR) IS
         BEGIN
-            UPDATE Participante
-            SET Email = email
-            WHERE Id = SELF.Id;
+            self.email := email;
         END;
 END;
 /
@@ -272,9 +237,7 @@ CREATE OR REPLACE TYPE BODY Amateur AS
 
     MEMBER PROCEDURE setFotografia(foto IN BLOB) IS
         BEGIN
-            UPDATE Amateur
-            SET Fotografia = foto
-            WHERE Id = SELF.Id;
+            self.Fotografia := foto;
         END;
 
 END;
@@ -304,9 +267,7 @@ CREATE OR REPLACE TYPE BODY Profesional AS
 
     MEMBER PROCEDURE setCurriculum(curriculum IN CLOB) IS
         BEGIN
-            UPDATE Profesional
-            SET Curriculum = curriculum
-            WHERE Id = SELF.Id;
+            self.curriculum := curriculum;
         END;
 
 END;
@@ -329,7 +290,6 @@ CREATE OR REPLACE TYPE Organizador AS OBJECT
     Organiza Lista_Ref_Ediciones,
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarOrganizador(),
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getNombre RETURN VARCHAR,
     MEMBER FUNCTION getApellidos RETURN VARCHAR,
@@ -343,12 +303,6 @@ CREATE OR REPLACE TYPE Organizador AS OBJECT
 /
 
 CREATE OR REPLACE TYPE BODY Organizador AS
-
-    MEMBER PROCEDURE borrarOrganizador()
-        BEGIN
-            DELETE from Organizador
-            WHERE Id = SELF.Id;
-        END;
 
     MEMBER FUNCTION getId RETURN NUMBER IS
         BEGIN
@@ -377,35 +331,26 @@ CREATE OR REPLACE TYPE BODY Organizador AS
 
     MEMBER PROCEDURE setNombre(nombre IN VARCHAR) IS
         BEGIN
-            UPDATE Organizador
-            SET Nombre = nombre
-            WHERE Id = SELF.Id;
+            self.nombre := nombre;
         END;
 
     MEMBER PROCEDURE setApellidos(apellidos IN VARCHAR) IS
         BEGIN
-            UPDATE Organizador
-            SET Apellidos = apellidos
-            WHERE Id = SELF.Id;
+            self.apellidos := apellidos;
         END;
 
     MEMBER PROCEDURE setNacimiento(nac IN DATE) IS
         BEGIN
-            UPDATE Organizador
-            SET Nacimiento = nac
-            WHERE Id = SELF.Id;
+            self.nacimiento := nac;
         END;
 
     MEMBER PROCEDURE setDni(dni IN VARCHAR) IS
         BEGIN
-            UPDATE Organizador
-            SET Dni = dni
-            WHERE Id = SELF.Id;
+            self.dni := dni;
         END;
 
 END;
 /
-
 show errors;
 
 /* Tipo Edicion */
@@ -423,7 +368,6 @@ CREATE OR REPLACE TYPE Edicion AS OBJECT
     Pertenece_a REF Torneo,
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarEdicion(),
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getInicio RETURN DATE,
     MEMBER FUNCTION getFin RETURN DATE,
@@ -433,12 +377,6 @@ CREATE OR REPLACE TYPE Edicion AS OBJECT
 /
 
 CREATE OR REPLACE TYPE BODY Edicion AS
-
-    MEMBER PROCEDURE borrarEdicion() IS
-        BEGIN
-            DELETE from Edicion
-            WHERE Id = SELF.Id;
-        END;
 
     MEMBER FUNCTION getId RETURN NUMBER IS
         BEGIN
@@ -457,16 +395,12 @@ CREATE OR REPLACE TYPE BODY Edicion AS
 
     MEMBER PROCEDURE setInicio(inicio IN DATE) IS
         BEGIN
-            UPDATE Edicion
-            SET Inicio = inicio
-            WHERE Id = SELF.Id;
+            self.inicio := inicio;
         END;
 
     MEMBER PROCEDURE setFin(fin IN DATE) IS
         BEGIN
-            UPDATE Edicion
-            SET Fin = fin
-            WHERE Id = SELF.Id;
+            self.fin := fin;
         END;
 
 END;
@@ -492,7 +426,6 @@ CREATE OR REPLACE TYPE Torneo AS OBJECT
     Tiene_Ediciones Lista_Ediciones, /* tabla anidada para composición */
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarTorneo(),
     MEMBER FUNCTION numEdiciones RETURN NUMBER,
     MEMBER FUNCTION totalParticipantes RETURN NUMBER,
     MEMBER FUNCTION getId RETURN NUMBER,
@@ -505,22 +438,16 @@ CREATE OR REPLACE TYPE Torneo AS OBJECT
 
 CREATE OR REPLACE TYPE BODY Torneo AS
 
-    MEMBER PROCEDURE borrarTorneo()
-        BEGIN
-            DELETE from Torneo
-            WHERE Id = SELF.Id;
-        END;
-
     MEMBER FUNCTION numEdiciones RETURN NUMBER IS
         BEGIN
-            
+           RETURN SELF.Id; 
         END;
 
     MEMBER FUNCTION totalParticipantes RETURN NUMBER IS
         BEGIN
-            
+            RETURN SELF.Id;
         END;
-
+    
     MEMBER FUNCTION getId RETURN NUMBER IS
         BEGIN
             RETURN SELF.Id;
@@ -538,19 +465,14 @@ CREATE OR REPLACE TYPE BODY Torneo AS
 
     MEMBER PROCEDURE setTitulo(titulo IN VARCHAR) IS
         BEGIN
-            UPDATE Torneo
-            SET Titulo = titulo
-            WHERE Id = SELF.Id;
+            self.titulo := titulo;
         END;
 
     MEMBER PROCEDURE setReglas(reglas IN CLOB) IS
         BEGIN
-            UPDATE Torneo
-            SET Reglas = reglas
-            WHERE Id = SELF.Id;
+            self.reglas := reglas;
         END;
 
 END;
 /
-
 show errors;
