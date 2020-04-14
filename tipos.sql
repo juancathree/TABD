@@ -47,7 +47,7 @@ CREATE OR REPLACE TYPE Videojuego AS OBJECT
     Dispositivos ListaDispositivos,
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarVideojuego,
+    MEMBER PROCEDURE borrarVideojuego(),
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getTitulo RETURN VARCHAR,
     MEMBER FUNCTION getPrecio RETURN NUMBER,
@@ -59,6 +59,71 @@ CREATE OR REPLACE TYPE Videojuego AS OBJECT
     MEMBER PROCEDURE setDispositivos(dispositivos IN ListaDispositivos)
 );
 /
+
+CREATE TYPE BODY Videojuego AS
+
+    MEMBER PROCEDURE borrarVideojuego() IS
+        BEGIN
+            DELETE from Videojuego
+            where Id = SELF.Id;
+        END;
+
+    MEMBER FUNCTION getId RETURNS NUMBER IS 
+        BEGIN   
+            RETURN SELF.Id;
+        END;
+
+    MEMBER FUNCTION getTitulo RETURNS VARCHAR IS
+        BEGIN
+            RETURN SELF.Titulo;
+        END;
+
+    MEMBER FUNCTION getPrecio RETURNS NUMBER IS
+        BEGIN
+            RETURN SELF.Precio;
+        END;
+    
+    MEMBER FUNCTION getAnio RETURNS NUMBER IS
+        BEGIN
+            RETURN SELF.Anio;
+        END;
+
+    MEMBER FUNCTION getDispositivos RETURNS ListaDispositivos IS
+        BEGIN
+            RETURN SELF.Dispositivos;
+        END;
+
+    MEMBER PROCEDURE setTitulo(titulo IN VARCHAR) IS 
+        BEGIN
+            UPDATE Videojuego
+            SET Titulo = titulo
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setPrecio(precio IN NUMBER) IS
+        BEGIN
+            UPDATE Videojuego
+            SET Precio = precio
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setAnio(anio IN NUMBER) IS
+        BEGIN
+            UPDATE Videojuego
+            SET Anio = anio
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setDispositivos(dispositivos IN ListaDispositivos) IS
+        BEGIN
+            UPDATE Videojuego
+            SET Dispositivos = dispositivos
+            WHERE Id = SELF.Id;
+        END;
+
+END;
+/
+
 show errors;
 
 /* Tipo Participante */
