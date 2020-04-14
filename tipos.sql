@@ -60,7 +60,7 @@ CREATE OR REPLACE TYPE Videojuego AS OBJECT
 );
 /
 
-CREATE TYPE BODY Videojuego AS
+CREATE OR REPLACE TYPE BODY Videojuego AS
 
     MEMBER PROCEDURE borrarVideojuego() IS
         BEGIN
@@ -143,7 +143,7 @@ CREATE OR REPLACE TYPE Participante AS OBJECT
     Inscrito_En Lista_Ref_Ediciones,
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarParticipante,
+    MEMBER PROCEDURE borrarParticipante(),
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getNombre RETURN VARCHAR,
     MEMBER FUNCTION getApellidos RETURN VARCHAR,
@@ -160,6 +160,94 @@ CREATE OR REPLACE TYPE Participante AS OBJECT
 
 ) NOT FINAL;
 /
+
+CREATE OR REPLACE TYPE BODY Participante AS
+
+    MEMBER PROCEDURE borrarParticipante() IS
+        BEGIN
+            DELETE from Participante
+            where Id = SELF.Id;
+        END;
+
+    MEMBER FUNCTION getId RETURN NUMBER IS
+        BEGIN
+            RETURN SELF.Id;
+        END;
+
+    MEMBER FUNCTION getNombre RETURN VARCHAR IS
+        BEGIN
+            RETURN SELF.Nombre;
+        END;
+
+    MEMBER FUNCTION getApellidos RETURN VARCHAR IS
+        BEGIN
+            RETURN SELF.Apellidos;
+        END;
+
+    MEMBER FUNCTION getDni RETURN NUMBER IS
+        BEGIN
+            RETURN SELF.Dni;
+        END;
+
+    MEMBER FUNCTION getNacimiento RETURN DATE IS
+        BEGIN
+            RETURN SELF.Nacimiento;
+        END;
+
+    MEMBER FUNCTION getDomicilo RETURN VARCHAR IS
+        BEGIN
+            RETURN SELF.Domicilo;
+        END;
+
+    MEMBER FUNCTION getEmail RETURN VARCHAR IS
+        BEGIN
+            RETURN SELF.Email;
+        END;
+
+    MEMBER PROCEDURE setNombre(nombre IN VARCHAR) IS
+        BEGIN
+            UPDATE Participante
+            SET Nombre = nombre
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setApellidos(apellidos IN VARCHAR) IS
+        BEGIN
+            UPDATE Participante
+            SET Apellidos = apellidos
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setDni(dni IN VARCHAR) IS 
+        BEGIN
+            UPDATE Participante
+            SET Dni = dni
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setNacimiento(nac IN DATE) IS
+        BEGIN
+            UPDATE Participante
+            SET Nacimiento = nac
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setDomicilio(domicilio IN VARCHAR) IS
+        BEGIN
+            UPDATE Participante
+            SET Domicilio = domicilio
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setEmail(email IN VARCHAR) IS
+        BEGIN
+            UPDATE Participante
+            SET Email = email
+            WHERE Id = SELF.Id;
+        END;
+END;
+/
+
 show errors;
 
 /* Subtipo de Participante: Amateur */
@@ -174,6 +262,24 @@ CREATE OR REPLACE TYPE Amateur UNDER Participante
     MEMBER PROCEDURE setFotografia(foto IN BLOB)
 );
 /
+
+CREATE OR REPLACE TYPE BODY Amateur AS
+
+    MEMBER FUNCTION getFotografia RETURN BLOB IS
+        BEGIN
+            RETURN SELF.Fotografia;
+        END;
+
+    MEMBER PROCEDURE setFotografia(foto IN BLOB) IS
+        BEGIN
+            UPDATE Amateur
+            SET Fotografia = foto
+            WHERE Id = SELF.Id;
+        END;
+
+END;
+/
+
 show errors;
 
 /* Subtipo de Participante: Profesional */
@@ -188,6 +294,24 @@ CREATE OR REPLACE TYPE Profesional UNDER Participante
     MEMBER PROCEDURE setCurriculum(curriculum IN CLOB)
 );
 /
+
+CREATE OR REPLACE TYPE BODY Profesional AS
+
+    MEMBER FUNCTION getCurriculum RETURN CLOB IS
+        BEGIN
+            RETURN SELF.Curriculum;
+        END;
+
+    MEMBER PROCEDURE setCurriculum(curriculum IN CLOB) IS
+        BEGIN
+            UPDATE Profesional
+            SET Curriculum = curriculum
+            WHERE Id = SELF.Id;
+        END;
+
+END;
+/
+
 show errors;
 
 /* Tipo Organizador */
@@ -205,7 +329,7 @@ CREATE OR REPLACE TYPE Organizador AS OBJECT
     Organiza Lista_Ref_Ediciones,
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarOrganizador,
+    MEMBER PROCEDURE borrarOrganizador(),
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getNombre RETURN VARCHAR,
     MEMBER FUNCTION getApellidos RETURN VARCHAR,
@@ -217,6 +341,71 @@ CREATE OR REPLACE TYPE Organizador AS OBJECT
     MEMBER PROCEDURE setDni(dni IN VARCHAR)
 );
 /
+
+CREATE OR REPLACE TYPE BODY Organizador AS
+
+    MEMBER PROCEDURE borrarOrganizador()
+        BEGIN
+            DELETE from Organizador
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER FUNCTION getId RETURN NUMBER IS
+        BEGIN
+            RETURN SELF.Id;
+        END;
+
+    MEMBER FUNCTION getNombre RETURN VARCHAR IS
+        BEGIN
+            RETURN SELF.Nombre;
+        END;
+
+    MEMBER FUNCTION getApellidos RETURN VARCHAR IS
+        BEGIN
+            RETURN SELF.Apellidos;
+        END;
+
+    MEMBER FUNCTION getNacimiento RETURN DATE IS
+        BEGIN
+            RETURN SELF.Nacimiento;
+        END;
+
+    MEMBER FUNCTION getDni RETURN VARCHAR IS
+        BEGIN
+            RETURN SELF.Dni;
+        END;
+
+    MEMBER PROCEDURE setNombre(nombre IN VARCHAR) IS
+        BEGIN
+            UPDATE Organizador
+            SET Nombre = nombre
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setApellidos(apellidos IN VARCHAR) IS
+        BEGIN
+            UPDATE Organizador
+            SET Apellidos = apellidos
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setNacimiento(nac IN DATE) IS
+        BEGIN
+            UPDATE Organizador
+            SET Nacimiento = nac
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setDni(dni IN VARCHAR) IS
+        BEGIN
+            UPDATE Organizador
+            SET Dni = dni
+            WHERE Id = SELF.Id;
+        END;
+
+END;
+/
+
 show errors;
 
 /* Tipo Edicion */
@@ -234,7 +423,7 @@ CREATE OR REPLACE TYPE Edicion AS OBJECT
     Pertenece_a REF Torneo,
 
     /* Declaración de métodos */
-    MEMBER PROCEDURE borrarEdicion,
+    MEMBER PROCEDURE borrarEdicion(),
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getInicio RETURN DATE,
     MEMBER FUNCTION getFin RETURN DATE,
@@ -242,6 +431,47 @@ CREATE OR REPLACE TYPE Edicion AS OBJECT
     MEMBER PROCEDURE setFin(fin IN DATE)
 );
 /
+
+CREATE OR REPLACE TYPE BODY Edicion AS
+
+    MEMBER PROCEDURE borrarEdicion() IS
+        BEGIN
+            DELETE from Edicion
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER FUNCTION getId RETURN NUMBER IS
+        BEGIN
+            RETURN SELF.Id;
+        END;
+
+    MEMBER FUNCTION getInicio RETURN DATE IS
+        BEGIN
+            RETURN SELF.Inicio;
+        END;
+
+    MEMBER FUNCTION getFin RETURN DATE IS
+        BEGIN
+            RETURN SELF.Fin;
+        END;
+
+    MEMBER PROCEDURE setInicio(inicio IN DATE) IS
+        BEGIN
+            UPDATE Edicion
+            SET Inicio = inicio
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setFin(fin IN DATE) IS
+        BEGIN
+            UPDATE Edicion
+            SET Fin = fin
+            WHERE Id = SELF.Id;
+        END;
+
+END;
+/
+
 show errors;
 
 CREATE OR REPLACE TYPE Lista_Ediciones AS TABLE OF Edicion; /* Para almacenar las ediciones de un torneo*/
@@ -262,9 +492,9 @@ CREATE OR REPLACE TYPE Torneo AS OBJECT
     Tiene_Ediciones Lista_Ediciones, /* tabla anidada para composición */
 
     /* Declaración de métodos */
+    MEMBER PROCEDURE borrarTorneo(),
     MEMBER FUNCTION numEdiciones RETURN NUMBER,
     MEMBER FUNCTION totalParticipantes RETURN NUMBER,
-    MEMBER PROCEDURE borrarTorneo,
     MEMBER FUNCTION getId RETURN NUMBER,
     MEMBER FUNCTION getTitulo RETURN VARCHAR,
     MEMBER FUNCTION getReglas RETURN CLOB,
@@ -272,4 +502,55 @@ CREATE OR REPLACE TYPE Torneo AS OBJECT
     MEMBER PROCEDURE setReglas(reglas IN CLOB)
 );
 /
+
+CREATE OR REPLACE TYPE BODY Torneo AS
+
+    MEMBER PROCEDURE borrarTorneo()
+        BEGIN
+            DELETE from Torneo
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER FUNCTION numEdiciones RETURN NUMBER IS
+        BEGIN
+            
+        END;
+
+    MEMBER FUNCTION totalParticipantes RETURN NUMBER IS
+        BEGIN
+            
+        END;
+
+    MEMBER FUNCTION getId RETURN NUMBER IS
+        BEGIN
+            RETURN SELF.Id;
+        END;
+
+    MEMBER FUNCTION getTitulo RETURN VARCHAR IS
+        BEGIN
+            RETURN SELF.Titulo;
+        END;
+
+    MEMBER FUNCTION getReglas RETURN CLOB IS
+        BEGIN
+            RETURN SELF.Reglas;
+        END;
+
+    MEMBER PROCEDURE setTitulo(titulo IN VARCHAR) IS
+        BEGIN
+            UPDATE Torneo
+            SET Titulo = titulo
+            WHERE Id = SELF.Id;
+        END;
+
+    MEMBER PROCEDURE setReglas(reglas IN CLOB) IS
+        BEGIN
+            UPDATE Torneo
+            SET Reglas = reglas
+            WHERE Id = SELF.Id;
+        END;
+
+END;
+/
+
 show errors;
