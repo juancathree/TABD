@@ -1,3 +1,5 @@
+/* FICHERO PARA BORRAR TODO */
+
 DROP TYPE edicion FORCE;
 DROP TYPE participante FORCE;
 DROP TYPE organizador FORCE;
@@ -16,3 +18,5 @@ DROP TABLE Tabla_Amateur FORCE;
 DROP TABLE Tabla_Profesional FORCE;
 DROP TABLE Tabla_Organizador FORCE;
 DROP TABLE Tabla_Torneo FORCE;
+DROP SEQUENCE secVideojuego;
+DROP PROCEDURE Add_Videojuego;
