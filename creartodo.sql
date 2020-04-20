@@ -3,4 +3,4 @@
 @tipos.sql
 @tablas.sql
 @secuencias.sql
-@paquete.sql
+@paquetes.sql

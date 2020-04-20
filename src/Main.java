@@ -1,9 +1,13 @@
 import java.sql.*;
 import java.util.*;
+import oracle.jdbc.*;
+import oracle.jdbc.driver.*;
+
 
 public class Main
 {
 	private static Scanner teclado;
+	public static DataHandler dl;
 
 	/**
 	 * Pantalla de inicio
@@ -14,7 +18,7 @@ public class Main
 	{
 		teclado = new Scanner(System.in);
 		
-		DataHandler dl = new DataHandler();
+		dl = new DataHandler();
 		dl.getDBConnection();
 		
 		int perfil = 0;
@@ -134,7 +138,7 @@ public class Main
 			switch(opcionVideojuego)
 			{
 				case 1: anadirNuevoVideojuego(); break;
-				//case 2: verVideojuegosDisponibles(); break;
+				case 2: verVideojuegosDisponibles(); break;
 				default: salir = true; break;
 			}
 		}
@@ -150,41 +154,210 @@ public class Main
 		String titulo;
 		double precio;
 		int anio;
-		String[] dispositivos = new String[10];
 		String disp = " ";
 		int nMaxDisp = 10;
 		
-		System.out.println("\n\nIntroduzca los datos del videojuego. Pulse Enter si desea dejar un campo en blanco");
-		teclado.nextLine();
-		System.out.print("Título: ");
-		titulo = teclado.nextLine();
-		System.out.print("Precio: ");
-		precio = teclado.nextDouble();
-		System.out.print("Año de lanzamiento: ");
-		anio = teclado.nextInt();
-		teclado.nextLine();
-		
-		while(nMaxDisp > 0 && !disp.isEmpty())
+		try
 		{
-			System.out.println("Introduzca los dispositivos en los que está disponible. Máximo: "
-								+ nMaxDisp + " dispositivos");
-			System.out.print("Nombre del dispositivo: ");
-			disp = teclado.nextLine();
-			if(!disp.isEmpty())
+			System.out.println("\n\nIntroduzca los datos del videojuego.");
+			teclado.nextLine();
+			System.out.print("Título: ");
+			titulo = teclado.nextLine();
+			System.out.print("Precio: ");
+			precio = teclado.nextDouble();
+			System.out.print("Año de lanzamiento: ");
+			anio = teclado.nextInt();
+			teclado.nextLine();
+		
+			CallableStatement call = DataHandler.conn.prepareCall("{call funcionesVideojuego.Add_Videojuego(?,?,?)}");
+			call.setString(1, titulo);
+			call.setDouble(2, precio);
+			call.setInt(3, anio);
+			call.executeUpdate();
+		
+			Statement stmt = DataHandler.conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT MAX(Id) FROM Tabla_Videojuego");
+			rs.next();
+			int id = rs.getInt(1);
+		
+			while(nMaxDisp > 0 && !disp.isEmpty())
 			{
-				dispositivos[10 - nMaxDisp] = disp;
-				nMaxDisp--;
+				System.out.println("Introduzca los dispositivos en los que está disponible. Máximo: "
+									+ nMaxDisp + " dispositivos");
+				System.out.print("Nombre del dispositivo: ");
+				disp = teclado.nextLine();
+				if(!disp.isEmpty())
+				{
+					CallableStatement callDisp = DataHandler.conn.
+							prepareCall("{call funcionesVideojuego.Add_Dispositivo_Videojuego(?,?,?)");
+					callDisp.setInt(1, id);
+					callDisp.setInt(2, 10 - nMaxDisp + 1);
+					callDisp.setString(3, disp);
+					callDisp.executeUpdate();
+					nMaxDisp--;
+				}
 			}
 		}
+		catch(Exception e)
+		{
+			System.out.println("Error al introducir un campo en el formulario");
+		}
+	}
+	
+	
+	/**
+	 * Pantalla para devolver todos los videojuegos disponibles
+	 */
+	public static void verVideojuegosDisponibles() throws Exception
+	{
+		Statement stmt = DataHandler.conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Tabla_Videojuego");
+	
+		while(rs.next())
+		{
+			System.out.print(rs.getInt("Id") + "-. " + rs.getString("Titulo") + ", " + rs.getDouble("Precio")
+			+ "€ (" + rs.getInt("Anio") + "). Dispositivos: ");
+			Array array = rs.getArray("Dispositivos");
+			if(array != null)
+			{
+				Object[] dispositivos = (Object[]) array.getArray();
+				for(int i = 0; i < dispositivos.length; i++)
+					System.out.print(dispositivos[i] + " ");
+			}
+			else
+				System.out.print("ninguno");
+			System.out.println("");
+		}
+		rs.close();
+		stmt.close();
 		
-		Array array = DataHandler.conn.createArrayOf("ListaDispositivos", dispositivos);
+		/* A continuación, el usuario podrá modificar o borrar un videojuego */
+		boolean salir = false, salirMod = false;
+		int idElegido = 0, opcion = -1;
 		
-		CallableStatement call = DataHandler.conn.prepareCall("{call Add_Videojuego(?,?,?,?)}");
-		call.setString(1, titulo);
-		call.setDouble(2, precio);
-		call.setInt(3, anio);
-		call.setArray(4, array);
-		call.executeUpdate();
+		while(!salir)
+		{
+			salirMod = false;
+			try
+			{
+				System.out.print("Seleccione un ID (escriba 0 para salir): ");
+				idElegido = teclado.nextInt();
+			}
+			catch(Exception e)
+			{
+				System.out.println("Formato introducido incorrecto");
+				teclado = new Scanner(System.in);
+			}
+			
+			if(idElegido > 0)
+			{
+				while(!salirMod)
+				{
+					System.out.println("¿Qué desea hacer?");
+					System.out.println("1-. Modificar datos del videojuego");
+					System.out.println("2-. Eliminar videojuego");
+					System.out.println("Otro-. Salir");
+					System.out.print("Su opción: ");
+					try {
+						opcion = teclado.nextInt();
+						salirMod = true;
+					}
+					catch(Exception e)
+					{
+						System.out.println("Formato de entrada incorrecto.");
+						teclado = new Scanner(System.in);
+					}
+				}
+				
+				switch(opcion)
+				{
+					case 1: modificarDatosVideojuego(idElegido); break;
+					case 2: eliminarVideojuego(idElegido); break;
+					default: salir = true; break;
+				}
+			}
+			else
+				salir = true;
+		}
+	}
+	
+	
+	/**
+	 * Función para modificar los datos del videojuego dado
+	 * @param id
+	 */
+	public static void modificarDatosVideojuego(int id)
+	{
+		String titulo;
+		double precio;
+		int anio;
+		String disp = " ";
+		
+		try
+		{
+			System.out.println("\n\nIntroduzca los datos del videojuego.");
+			teclado.nextLine();
+			System.out.print("Título: ");
+			titulo = teclado.nextLine();
+			System.out.print("Precio: ");
+			precio = teclado.nextDouble();
+			System.out.print("Año de lanzamiento: ");
+			anio = teclado.nextInt();
+			teclado.nextLine();
+			
+			CallableStatement call = DataHandler.conn.prepareCall("{call funcionesVideojuego.Update_Videojuego(?,?,?,?)}");
+			call.setInt(1,id);
+			call.setString(2, titulo);
+			call.setDouble(3, precio);
+			call.setInt(4, anio);
+			call.executeUpdate();
+			
+			Statement stmt = DataHandler.conn.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM table(select dispositivos "
+					+ "from tabla_videojuego where id = " + id + ")");
+			rs.next();
+			int nMaxDisp = 10 - rs.getInt(1);
+			
+			while(nMaxDisp > 0 && !disp.isEmpty())
+			{
+				System.out.println("Introduzca los dispositivos en los que está disponible. Máximo: "
+									+ nMaxDisp + " dispositivos");
+				System.out.print("Nombre del dispositivo: ");
+				disp = teclado.nextLine();
+				if(!disp.isEmpty())
+				{
+					CallableStatement callDisp = DataHandler.conn.
+							prepareCall("{call funcionesVideojuego.Add_Dispositivo_Videojuego(?,?,?)");
+					callDisp.setInt(1, id);
+					callDisp.setInt(2, 10 - nMaxDisp + 1);
+					callDisp.setString(3, disp);
+					callDisp.executeUpdate();
+					nMaxDisp--;
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error al introducir un campo en el formulario");
+		}
+	}
+	
+	/**
+	 * Función para eliminar un videojuego dado
+	 * @param id
+	 */
+	public static void eliminarVideojuego(int id)
+	{
+		try
+		{
+			CallableStatement call = DataHandler.conn.prepareCall("{call funcionesVideojuego.Delete_Videojuego(?)}");
+			call.setInt(1, id);
+			call.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	
