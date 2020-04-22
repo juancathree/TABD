@@ -19,4 +19,6 @@ DROP TABLE Tabla_Profesional FORCE;
 DROP TABLE Tabla_Organizador FORCE;
 DROP TABLE Tabla_Torneo FORCE;
 DROP SEQUENCE seqVideojuego;
+DROP SEQUENCE seqOrganizador;
 DROP PACKAGE funcionesVideojuego;
+DROP PACKAGE funcionesOrganizador;
