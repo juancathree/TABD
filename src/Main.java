@@ -31,13 +31,13 @@ public class Main
 			opcionElegida = false;
 			while(!opcionElegida)
 			{	
-				System.out.println("\n\nBienvenido a la Asociación Española de Videojuegos");
-				System.out.println("Seleccione el perfil con el que desea acceder a la aplicación");
+				System.out.println("\n\nBienvenido a la Asociaciï¿½n Espaï¿½ola de Videojuegos");
+				System.out.println("Seleccione el perfil con el que desea acceder a la aplicaciï¿½n");
 				System.out.println("1-. Administrador");
 				System.out.println("2-. Organizador");
 				System.out.println("3-. Participante");
 				System.out.println("Otro-. Salir");
-				System.out.print("Su opción: ");
+				System.out.print("Su opciï¿½n: ");
 				try {
 					perfil = teclado.nextInt();
 					opcionElegida = true;
@@ -52,12 +52,12 @@ public class Main
 			switch(perfil)
 			{
 				case 1 : administrador(); break;
-				//case 2 : organizador(); break;
+				case 2 : organizador(); break;
 				//case 3 : participante(); break;
 				default: salir = true; break;
 			}
 		}
-		System.out.println("Ha finalizado su sesión");
+		System.out.println("Ha finalizado su sesiï¿½n");
 		dl.closeConnection();
 	}
 	
@@ -77,12 +77,12 @@ public class Main
 			opcionElegida = false;
 			while(!opcionElegida)
 			{
-				System.out.println("\n\n Bienvenido, administrador. ¿Qué desea hacer?");
+				System.out.println("\n\n Bienvenido, administrador. ï¿½Quï¿½ desea hacer?");
 				System.out.println("1-. Administrar torneos");
 				System.out.println("2-. Administrar organizadores");
 				System.out.println("3-. Administrar videojuegos");
 				System.out.println("Otro-. Salir");
-				System.out.print("Su opción: ");
+				System.out.print("Su opciï¿½n: ");
 				try {
 					opcionAdmin = teclado.nextInt();
 					opcionElegida = true;
@@ -120,11 +120,11 @@ public class Main
 			opcionElegida = false;
 			while(!opcionElegida)
 			{
-				System.out.println("\n\n Administrar Organizadores. ¿Qué desea hacer?");
-				System.out.println("1-. Añadir nuevo organizador");
+				System.out.println("\n\n Administrar Organizadores. ï¿½Quï¿½ desea hacer?");
+				System.out.println("1-. Aï¿½adir nuevo organizador");
 				System.out.println("2-. Ver organizadores disponibles");
 				System.out.println("Otro-. Salir");
-				System.out.print("Su opción: ");
+				System.out.print("Su opciï¿½n: ");
 				try {
 					opcionOrganizador = teclado.nextInt();
 					opcionElegida = true;
@@ -182,7 +182,7 @@ public class Main
 	
 	
 	/**
-	 * Pantalla para ver los organizadores disponibles en la asociación
+	 * Pantalla para ver los organizadores disponibles en la asociaciï¿½n
 	 * @throws Exception
 	 */
 	public static void verOrganizadoresDisponibles() throws Exception
@@ -198,7 +198,7 @@ public class Main
 		rs.close();
 		stmt.close();
 		
-		/* A continuación, el usuario podrá modificar o borrar un organizador, o ver sus ediciones organizadas */
+		/* A continuaciï¿½n, el usuario podrï¿½ modificar o borrar un organizador, o ver sus ediciones organizadas */
 		boolean salir = false, salirMod = false;
 		int idElegido = 0, opcion = -1;
 		
@@ -220,12 +220,12 @@ public class Main
 			{
 				while(!salirMod)
 				{
-					System.out.println("¿Qué desea hacer?");
+					System.out.println("ï¿½Quï¿½ desea hacer?");
 					System.out.println("1-. Modificar datos del organizador");
 					System.out.println("2-. Eliminar organizador");
 					System.out.println("3-. Ver ediciones organizadas");
 					System.out.println("Otro-. Salir");
-					System.out.print("Su opción: ");
+					System.out.print("Su opciï¿½n: ");
 					try {
 						opcion = teclado.nextInt();
 						salirMod = true;
@@ -334,11 +334,11 @@ public class Main
 			opcionElegida = false;
 			while(!opcionElegida)
 			{
-				System.out.println("\n\n Administrar Videojuegos. ¿Qué desea hacer?");
-				System.out.println("1-. Añadir nuevo videojuego");
+				System.out.println("\n\n Administrar Videojuegos. ï¿½Quï¿½ desea hacer?");
+				System.out.println("1-. Aï¿½adir nuevo videojuego");
 				System.out.println("2-. Ver videojuegos disponibles");
 				System.out.println("Otro-. Salir");
-				System.out.print("Su opción: ");
+				System.out.print("Su opciï¿½n: ");
 				try {
 					opcionVideojuego = teclado.nextInt();
 					opcionElegida = true;
@@ -376,11 +376,11 @@ public class Main
 		{
 			System.out.println("\n\nIntroduzca los datos del videojuego.");
 			teclado.nextLine();
-			System.out.print("Título: ");
+			System.out.print("Tï¿½tulo: ");
 			titulo = teclado.nextLine();
 			System.out.print("Precio: ");
 			precio = teclado.nextDouble();
-			System.out.print("Año de lanzamiento: ");
+			System.out.print("Aï¿½o de lanzamiento: ");
 			anio = teclado.nextInt();
 			teclado.nextLine();
 		
@@ -397,7 +397,7 @@ public class Main
 		
 			while(nMaxDisp > 0 && !disp.isEmpty())
 			{
-				System.out.println("Introduzca los dispositivos en los que está disponible. Máximo: "
+				System.out.println("Introduzca los dispositivos en los que estï¿½ disponible. Mï¿½ximo: "
 									+ nMaxDisp + " dispositivos");
 				System.out.print("Nombre del dispositivo: ");
 				disp = teclado.nextLine();
@@ -431,7 +431,7 @@ public class Main
 		while(rs.next())
 		{
 			System.out.print(rs.getInt("Id") + "-. " + rs.getString("Titulo") + ", " + rs.getDouble("Precio")
-			+ "€ (" + rs.getInt("Anio") + "). Dispositivos: ");
+			+ "ï¿½ (" + rs.getInt("Anio") + "). Dispositivos: ");
 			Array array = rs.getArray("Dispositivos");
 			if(array != null)
 			{
@@ -446,7 +446,7 @@ public class Main
 		rs.close();
 		stmt.close();
 		
-		/* A continuación, el usuario podrá modificar o borrar un videojuego */
+		/* A continuaciï¿½n, el usuario podrï¿½ modificar o borrar un videojuego */
 		boolean salir = false, salirMod = false;
 		int idElegido = 0, opcion = -1;
 		
@@ -468,11 +468,11 @@ public class Main
 			{
 				while(!salirMod)
 				{
-					System.out.println("¿Qué desea hacer?");
+					System.out.println("ï¿½Quï¿½ desea hacer?");
 					System.out.println("1-. Modificar datos del videojuego");
 					System.out.println("2-. Eliminar videojuego");
 					System.out.println("Otro-. Salir");
-					System.out.print("Su opción: ");
+					System.out.print("Su opciï¿½n: ");
 					try {
 						opcion = teclado.nextInt();
 						salirMod = true;
@@ -498,7 +498,7 @@ public class Main
 	
 	
 	/**
-	 * Función para modificar los datos del videojuego dado
+	 * Funciï¿½n para modificar los datos del videojuego dado
 	 * @param id
 	 */
 	public static void modificarDatosVideojuego(int id)
@@ -512,11 +512,11 @@ public class Main
 		{
 			System.out.println("\n\nIntroduzca los datos del videojuego.");
 			teclado.nextLine();
-			System.out.print("Título: ");
+			System.out.print("Tï¿½tulo: ");
 			titulo = teclado.nextLine();
 			System.out.print("Precio: ");
 			precio = teclado.nextDouble();
-			System.out.print("Año de lanzamiento: ");
+			System.out.print("Aï¿½o de lanzamiento: ");
 			anio = teclado.nextInt();
 			teclado.nextLine();
 			
@@ -535,7 +535,7 @@ public class Main
 			
 			while(nMaxDisp > 0 && !disp.isEmpty())
 			{
-				System.out.println("Introduzca los dispositivos en los que está disponible. Máximo: "
+				System.out.println("Introduzca los dispositivos en los que estï¿½ disponible. Mï¿½ximo: "
 									+ nMaxDisp + " dispositivos");
 				System.out.print("Nombre del dispositivo: ");
 				disp = teclado.nextLine();
@@ -559,7 +559,7 @@ public class Main
 	
 	
 	/**
-	 * Función para eliminar un videojuego dado
+	 * Funciï¿½n para eliminar un videojuego dado
 	 * @param id
 	 */
 	public static void eliminarVideojuego(int id)
@@ -574,5 +574,411 @@ public class Main
 		{
 			System.out.println(e.getMessage());
 		}
-	}	
+	}
+
+	/**
+	 * Pantalla para organizador
+	 * @throws Exception
+	 */
+	public static void organizador() throws Exception
+	{
+		int opcionOrg = 0;
+		boolean opcionElegida = false;
+		boolean salir = false;
+		
+		while(!salir)
+		{
+			opcionElegida = false;
+			while(!opcionElegida)
+			{
+				System.out.println("\n\n Bienvenido, organizador. ï¿½Quï¿½ desea hacer?");
+				System.out.println("1-. Organizar ediciones");
+				System.out.println("2-. Organizar organizadores");
+				System.out.println("3-. Organizar participantes");
+				System.out.println("Otro-. Salir");
+				System.out.print("Su opciï¿½n: ");
+				try {
+					opcionOrg = teclado.nextInt();
+					opcionElegida = true;
+				}
+				catch(Exception e)
+				{
+					System.out.println("Formato de entrada incorrecto.");
+					teclado = new Scanner(System.in);
+				}
+			}
+		
+			switch(opcionOrg)
+			{
+				case 1: organizarEdiciones(); break;
+				case 2: organizarOrganizadores(); break;
+				case 3: organizarParticipantes(); break;
+				default: salir = true; break;
+			}
+		}
+	}
+
+	/**
+	 * Pantalla para organizar ediciones
+	 * @throws Exception
+	 */
+	public static void organizarEdiciones() throws Exception
+	{
+		int opcionOrganizador = 0;
+		boolean opcionElegida = false;
+		boolean salir = false;
+		
+		while(!salir)
+		{
+			opcionElegida = false;
+			while(!opcionElegida)
+			{
+				System.out.println("\n\n Organizar Ediciones. ï¿½Quï¿½ desea hacer?");
+				System.out.println("1-. Crear edicion");
+				System.out.println("2-. Ver organizadores de una edicion");
+				System.out.println("3-. Ver ediciones organizadas");
+				System.out.println("4-. Modificar Edicion");
+				System.out.println("Otro-. Salir");
+				System.out.print("Su opciï¿½n: ");
+				try {
+					opcionOrganizador = teclado.nextInt();
+					opcionElegida = true;
+				}
+				catch(Exception e)
+				{
+					System.out.println("Formato de entrada incorrecto");
+					teclado = new Scanner(System.in);
+				}
+			}
+			
+			switch(opcionOrganizador)
+			{
+				case 1: anadirNuevaEdicion(); break;
+				case 2: verOrganizadoresEdicion(); break;
+				case 3: verEdicionesOrganizadas(); break;
+				case 4: modificarEdicion(); break;
+				default: salir = true; break;
+			}
+		}
+	}
+
+	/**
+	 * Pantalla para crear una edicion
+	 * @throws Exception
+	 */
+	public static void anadirNuevaEdicion() throws Exception
+	{
+		Statement stmt = DataHandler.conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Tabla_Torneo");
+		
+		while(rs.next())
+		{
+			System.out.println(rs.getInt("Id") + "-. " + rs.getString("Titulo"));
+		}
+		rs.close();
+		stmt.close();
+
+		String inicio, fin, id;
+		try
+		{
+			System.out.println("\n\nIntroduzca los datos de la edicion.");
+			teclado.nextLine();
+			System.out.print("Id del torneo: ");
+			id = teclado.nextLine();
+			System.out.print("Inicio (YYYY-MM-DD): ");
+			inicio = teclado.nextLine();
+			System.out.print("Final (YYYY-MM-DD): ");
+			fin = teclado.nextLine();
+			Date inicioDate = Date.valueOf(inicio);
+			Date finDate = Date.valueOf(fin);
+			
+			CallableStatement call = DataHandler.conn.prepareCall("{call funcionesEdicion.Add_Edicion_Torneo(?,?,?)}");
+			call.setString(1, id);
+			call.setDate(2, inicioDate);
+			call.setDate(3, finDate);
+			call.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error al introducir un campo en el formulario");
+		}
+	}
+
+
+	/**
+	 * Pantalla para ver organizadores de una edicion
+	 * @throws Exception
+	 */
+	public static void verOrganizadoresEdicion() throws Exception
+	{
+
+		String dni;
+		try
+		{
+			System.out.println("\n\nIntroduce dni: ");
+			dni = teclado.nextLine();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Formato de entrada incorrecto");
+			teclado = new Scanner(System.in);
+		}
+
+		Statement stmt = DataHandler.conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT DEREF(O.Organiza) FROM Tabla_Organizador O where O.Dni = " + dni);
+		
+		while(rs.next())
+		{
+			System.out.println(rs.getInt("Id") + "-. desde " + rs.getString("Inicio") + " hasta " + rs.getString("Fin"));
+		}
+		rs.close();
+
+
+		String id;
+		try
+		{
+			System.out.println("\n\nSeleccione la edicion: ");
+			id = teclado.nextLine();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Formato de entrada incorrecto");
+			teclado = new Scanner(System.in);
+		}
+
+		rs = stmt.executeQuery("SELECT Organizada_Por FROM Tabla_Edicion WHERE Id = " + id);
+		
+		while(rs.next())
+		{
+			System.out.println(rs.getInt("Id") + "-. " + rs.getString("Nombre") + " " + rs.getString("Apellidos"));
+		}
+		rs.close();
+		stmt.close();
+	}
+
+	/**
+	 * Pantalla para ver ediciones organizadas
+	 * @throws Exception
+	 */
+	public static void verEdicionesOrganizadas() throws Exception
+	{
+
+		String dni;
+		try
+		{
+			System.out.println("\n\nIntroduce dni: ");
+			dni = teclado.nextLine();
+		}
+		catch(Exception e)
+		{
+					System.out.println("Formato de entrada incorrecto");
+					teclado = new Scanner(System.in);
+		}
+		Statement stmt = DataHandler.conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT DEREF(REF(e)) FROM TABLE(SELECT Organiza FROM Tabla_Organizador WHERE dni = " + dni +")) e");
+		
+		while(rs.next())
+		{
+			System.out.println(rs.getInt("Id") + "-. desde " + rs.getString("Inicio") + " hasta " + rs.getString("Fin"));
+		}
+		rs.close();
+		stmt.close();
+	}
+
+	/**
+	 * Pantalla para ver ediciones organizadas
+	 * @throws Exception
+	 */
+	public static void modificarEdicion() throws Exception
+	{
+		verEdicionesOrganizadas();
+		String id;
+		try
+		{
+			System.out.println("\n\nSelecciona la edicion: ");
+			id = teclado.nextLine();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Formato de entrada incorrecto");
+			teclado = new Scanner(System.in);
+		}
+
+		String inicio, fin;
+		try
+		{
+			System.out.println("\n\nIntroduzca los datos de la edicion.");
+			teclado.nextLine();
+			System.out.print("Inicio (YYYY-MM-DD): ");
+			inicio = teclado.nextLine();
+			System.out.print("Final (YYYY-MM-DD): ");
+			fin = teclado.nextLine();
+			Date inicioDate = Date.valueOf(inicio);
+			Date finDate = Date.valueOf(fin);
+			
+			CallableStatement call = DataHandler.conn.prepareCall("{call funcionesEdicion.Update_Edicion(?,?,?)}");
+			call.setString(1, id);
+			call.setDate(2, inicioDate);
+			call.setDate(3, finDate);
+			call.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error al introducir un campo en el formulario");
+		}
+	}
+
+
+	/**
+	 * Pantalla para organizar organizadores
+	 * @throws Exception
+	 */
+	public static void organizarOrganizadores() throws Exception
+	{
+		int opcionOrganizador = 0;
+		boolean opcionElegida = false;
+		boolean salir = false;
+		
+		while(!salir)
+		{
+			opcionElegida = false;
+			while(!opcionElegida)
+			{
+				System.out.println("\n\n Organizar Organizadores. ï¿½Quï¿½ desea hacer?");
+				System.out.println("1-. AÃ±adir organizador");
+				System.out.println("2-. Quitar organizador");
+				System.out.println("Otro-. Salir");
+				System.out.print("Su opciï¿½n: ");
+				try {
+					opcionOrganizador = teclado.nextInt();
+					opcionElegida = true;
+				}
+				catch(Exception e)
+				{
+					System.out.println("Formato de entrada incorrecto");
+					teclado = new Scanner(System.in);
+				}
+			}
+			
+			switch(opcionOrganizador)
+			{
+				case 1: anadirOrganizador(); break;
+				case 2: quitarOranizador(); break;
+				default: salir = true; break;
+			}
+		}
+	}
+
+	/**
+	 * Pantalla para aÃ±adir un organizador a una edicion
+	 * @throws Exception
+	 */
+	public static void anadirOrganizador() throws Exception
+	{
+		verEdicionesOrganizadas();
+		String idE, idO;
+		try
+		{
+			System.out.println("\n\nSelecciona la edicion: ");
+			idE = teclado.nextLine();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Formato de entrada incorrecto");
+			teclado = new Scanner(System.in);
+		}
+		
+		Statement stmt = DataHandler.conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Tabla_Organizador");
+		
+		while(rs.next())
+		{
+			System.out.println(rs.getInt("Id") + "-. " + rs.getString("Nombre") + ", " + rs.getString("Apellidos")
+			+ ". Nacido el " + rs.getDate("Nacimiento"));
+		}
+		rs.close();
+		
+		try
+		{
+			System.out.println("\n\nSelecciona el organizador a aÃ±adir: ");
+			idO = teclado.nextLine();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Formato de entrada incorrecto");
+			teclado = new Scanner(System.in);
+		}
+
+		try
+		{			
+			CallableStatement call = DataHandler.conn.prepareCall("{call funcionesEdicion.Add_Organizador_Edicion(?,?)}");
+			call.setString(1, idE);
+			call.setString(2, idO);
+			call.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error al introducir un campo en el formulario");
+		}
+
+	}
+
+		/**
+	 * Pantalla para quitar un organziador
+	 * @throws Exception
+	 */
+	public static void quitarOranizador() throws Exception
+	{
+		verEdicionesOrganizadas();
+		String idE, idO;
+		try
+		{
+			System.out.println("\n\nSelecciona la edicion: ");
+			idE = teclado.nextLine();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Formato de entrada incorrecto");
+			teclado = new Scanner(System.in);
+		}
+		
+		Statement stmt = DataHandler.conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT Organizada_Por FROM Tabla_Edicion");
+		
+		while(rs.next())
+		{
+			System.out.println(rs.getInt("Id") + "-. " + rs.getString("Nombre") + ", " + rs.getString("Apellidos")
+			+ ". Nacido el " + rs.getDate("Nacimiento"));
+		}
+		rs.close();
+		
+		try
+		{
+			System.out.println("\n\nSelecciona el organizador a quitar: ");
+			idO = teclado.nextLine();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Formato de entrada incorrecto");
+			teclado = new Scanner(System.in);
+		}
+
+		try
+		{			
+			CallableStatement call = DataHandler.conn.prepareCall("{call funcionesEdicion.Delete_Organizador_Edicion(?,?)}");
+			call.setString(1, idE);
+			call.setString(2, idO);
+			call.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error al introducir un campo en el formulario");
+		}
+
+	}
+
+
+
+
 }
+

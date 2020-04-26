@@ -2,5 +2,5 @@
 
 @tipos.sql
 @tablas.sql
-@secuencias.sql
-@paquetes.sql
+-- @secuencias.sql
+-- @paquetes.sql

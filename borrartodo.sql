@@ -22,3 +22,4 @@ DROP SEQUENCE seqVideojuego;
 DROP SEQUENCE seqOrganizador;
 DROP PACKAGE funcionesVideojuego;
 DROP PACKAGE funcionesOrganizador;
+DROP PACKAGE funcionesEdicion;

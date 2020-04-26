@@ -362,7 +362,7 @@ show errors;
 CREATE OR REPLACE TYPE Edicion AS OBJECT
 (
     /* Declaración de atributos */
-    Id NUMBER(5),
+    Id NUMBER(5) GENERATED ALWAYS AS IDENTITY,
     Inicio DATE,
     Fin DATE,
 

@@ -76,3 +76,51 @@ CREATE OR REPLACE PACKAGE BODY funcionesOrganizador AS
 
 END funcionesOrganizador;
 /
+
+
+CREATE OR REPLACE PACKAGE funcionesEdicion AS
+    PROCEDURE Add_Edicion_Torneo(ini IN DATE, fin IN DATE);
+    PROCEDURE Add_Organizador_Edicion(cod IN NUMBER, codOrg IN NUMBER);
+    PROCEDURE Delete_Organizador_Edicion(cod IN NUMBER, codOrg IN NUMBER);
+    PROCEDURE Update_Edicion(cod IN NUMBER, ini IN DATE, fin IN DATE);
+END funcionesEdicion;
+/
+
+CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
+
+    PROCEDURE Add_Edicion_Torneo(cod IN NUMBER, ini IN DATE, fin IN DATE) IS
+        torneo REF Tabla_Torneo;
+        id NUMBER;
+    BEGIN
+        INSERT INTO TABLE(SELECT Tiene_Ediciones FROM Tabla_Torneo WHERE Id = cod)(Inicio, Fin) VALUES(ini, fin); 
+        SELECT REF(T) INTO torneo FROM Tabla_Torneo T WHERE T.Id = cod;
+        SELECT MAX(Id) INTO id FROM TABLE(SELECT Tiene_Ediciones FROM Tabla_Torneo WHERE Id = cod); /* no se si funciona */
+        UPDATE TABLE(SELECT Tiene_Ediciones FROM Tabla_Torneo WHERE Id = cod) SET Pertenece_a = torneo WHERE Id = id;
+    END;
+
+    PROCEDURE Add_Organizador_Edicion(codEd IN NUMBER, codOrg IN NUMBER, codTorn IN NUMBER) IS
+    BEGIN
+        INSERT INTO TABLE(SELECT Organizada_Por FROM TABLE(SELECT Tiene_Ediciones FROM Tabla_Torneo WHERE Id = codTorn) WHERE Id = codEd) 
+            VALUES(SELECT REF(O) FROM Tabla_Organizador O WHERE O.Dni = dni);
+        
+        INSERT INTO TABLE(SELECT Organiza FROM Tabla_Organizador WHERE Id = codOrg) 
+            VALUES(SELECT REF(E) FROM TABLE(SELECT * FROM TABLE(SELECT Tiene_Ediciones FROM Tabla_Torneo WHERE Id = codTorn)) E WHERE E.Id = codEd);
+    END;
+
+    PROCEDURE Delete_Organizador_Edicion(cod IN NUMBER, codOrg IN NUMBER) IS
+        organizador REF Tabla_Organizador;
+        edicion REF Tabla_Edicion;
+    BEGIN
+        SELECT REF(O) INTO organizador FROM Tabla_Organizador O WHERE O.Id = codOrg;
+        SELECT REF(E) INTO edicion FROM Tabla_Edicion E WHERE E.Id = cod;
+        DELETE FROM TABLE(SELECT Organizada_Por FROM Tabla_Edicion WHERE Id = cod) WHERE ; /* por terminar */
+        DELETE FROM TABLE(SELECT Organiza FROM Table_Organizador WHERE Id = cod) WHERE ;  /* port terminar*/
+    END;
+
+    PROCEDURE Update_Edicion(cod IN NUMBER, ini IN DATE, fin IN DATE) IS
+    BEGIN
+        UPDATE Tabla_Edicion SET Inicio = ini, Fin = fin WHERE Id = cod;
+    END;
+
+END funcionesEdicion;
+/
