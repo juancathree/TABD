@@ -725,7 +725,7 @@ public class Main
 		}
 
 		Statement stmt = DataHandler.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT DEREF(O.Organiza) FROM Tabla_Organizador O where O.Dni = " + dni);
+		// ResultSet rs = stmt.executeQuery("SELECT DEREF(O.Organiza) FROM Tabla_Organizador O where O.Dni = " + dni);
 		
 		while(rs.next())
 		{
@@ -746,7 +746,7 @@ public class Main
 			teclado = new Scanner(System.in);
 		}
 
-		rs = stmt.executeQuery("SELECT Organizada_Por FROM Tabla_Edicion WHERE Id = " + id);
+		// rs = stmt.executeQuery("SELECT Organizada_Por FROM Tabla_Edicion WHERE Id = " + id);
 		
 		while(rs.next())
 		{
@@ -775,7 +775,7 @@ public class Main
 					teclado = new Scanner(System.in);
 		}
 		Statement stmt = DataHandler.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT DEREF(REF(e)) FROM TABLE(SELECT Organiza FROM Tabla_Organizador WHERE dni = " + dni +")) e");
+		// ResultSet rs = stmt.executeQuery("SELECT DEREF(REF(e)) FROM TABLE(SELECT Organiza FROM Tabla_Organizador WHERE dni = " + dni +")) e");
 		
 		while(rs.next())
 		{
@@ -943,7 +943,7 @@ public class Main
 		}
 		
 		Statement stmt = DataHandler.conn.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT Organizada_Por FROM Tabla_Edicion");
+		// ResultSet rs = stmt.executeQuery("SELECT Organizada_Por FROM Tabla_Edicion");
 		
 		while(rs.next())
 		{

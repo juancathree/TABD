@@ -119,7 +119,7 @@ CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
 
     PROCEDURE Update_Edicion(cod IN NUMBER, ini IN DATE, fin IN DATE) IS
     BEGIN
-        UPDATE Tabla_Edicion SET Inicio = ini, Fin = fin WHERE Id = cod;
+        -- UPDATE Tabla_Edicion SET Inicio = ini, Fin = fin WHERE Id = cod;
     END;
 
 END funcionesEdicion;
