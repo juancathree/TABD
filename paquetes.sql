@@ -262,7 +262,12 @@ CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
             DELETE FROM TABLE(SELECT Inscrito_En FROM Tabla_Amateur WHERE Id=idPart) T WHERE T.COLUMN_VALUE.Id=idEdicion;
         ELSIF tipoPart == "profesional" THEN
             DELETE FROM TABLE(SELECT Inscrito_En FROM Tabla_Profesional WHERE Id=idPart) T WHERE T.COLUMN_VALUE.Id=idEdicion;
+        ELSE
+            RAISE categoriaIncorrecta;
         END IF;
+    EXCEPTION
+        WHEN categoriaIncorrecta THEN
+            RAISE_APPLICATION_ERROR(-20010, 'Esta categoria de partipante no existe');
     END;
 
 
