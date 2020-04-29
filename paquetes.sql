@@ -249,3 +249,22 @@ CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
 END funcionesEdicion;
 /
 
+CREATE OR REPLACE PACKAGE funcionesParticipante AS
+    PROCEDURE Remove_Participation(idPart IN NUMBER, tipoPart IN VARCHAR, idEdicion in NUMBER);
+END funcionesParticipante;
+/
+
+CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
+
+    PROCEDURE Remove_Participation(idPart IN NUMBER, tipoPart IN VARCHAR, idEdicion in NUMBER) AS
+    BEGIN
+        IF tipoPart == "amateur" THEN
+            DELETE FROM TABLE(SELECT Inscrito_En FROM Tabla_Amateur WHERE Id=idPart) T WHERE T.COLUMN_VALUE.Id=idEdicion;
+        ELSIF tipoPart == "profesional" THEN
+            DELETE FROM TABLE(SELECT Inscrito_En FROM Tabla_Profesional WHERE Id=idPart) T WHERE T.COLUMN_VALUE.Id=idEdicion;
+        END IF;
+    END;
+
+
+END funcionesParticipante;
+/
