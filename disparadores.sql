@@ -18,6 +18,24 @@ BEGIN
 END videojuegoConTorneos;
 /
 
+/* Disparador para borrar un torneo del que todavía existe una edicion */
+
+CREATE OR REPLACE TRIGGER torneoConEdicion BEFORE DELETE ON Tabla_Torneo
+FOR EACH ROW
+DECLARE
+    CURSOR existeEdicion IS SELECT DEREF(Pertenece_a).Id T, Id idEdicion FROM Tabla_Edicion;
+    PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+    FOR r_edicion IN existeEdicion LOOP
+      
+        IF NOT(:OLD.Id != r_edicion.T) THEN
+            DELETE FROM Tabla_Edicion WHERE Id = r_edicion.idEdicion; 
+        END IF;
+
+    END LOOP;
+END torneoConEdicion;
+/
+
 
 /* Disparador para evitar borrar un organizador que es el único organizador de alguna edición */
 
@@ -26,7 +44,7 @@ FOR EACH ROW
 DECLARE
     numOrganizadores NUMBER;
     CURSOR edicionesDelOrganizador IS 
-    SELECT V.COLUMN_VALUE.Id E FROM TABLE(SELECT organiza FROM tabla_organizador WHERE Id = :OLD.Id) V;
+    SELECT V.COLUMN_VALUE.Id E FROM TABLE(SELECT organiza FROM Tabla_Organizador WHERE Id = :OLD.Id) V;
     PRAGMA AUTONOMOUS_TRANSACTION;
 BEGIN
 
@@ -35,7 +53,7 @@ BEGIN
         WHERE Id = r_edicion.E); 
 
         IF numOrganizadores > 1 THEN
-            DELETE FROM TABLE(SELECT Organizada_Por FROM Tabla_Edicion WHERE Id = r_edicion.E) T;
+            DELETE FROM TABLE(SELECT Organizada_Por FROM Tabla_Edicion WHERE Id = r_edicion.E) T
             WHERE T.COLUMN_VALUE.Id = :OLD.Id;
         ELSE
             RAISE_APPLICATION_ERROR(-20014, 'No se puede eliminar al organizador unico de una edicion');
@@ -45,3 +63,36 @@ BEGIN
 END organizadorUnico;
 /
 
+/* Disparador para borrar una edicion que tiene participantes */
+
+CREATE OR REPLACE TRIGGER edicionConParticipanteA BEFORE DELETE ON Tabla_Amateur
+FOR EACH ROW
+DECLARE
+    CURSOR existeParticipante IS SELECT V.COLUMN_VALUE.Id E FROM TABLE(SELECT inscrito_en FROM Tabla_Amateur WHERE Id = :OLD.Id) V;
+    PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+    FOR r_edicion IN existeParticipante LOOP
+      
+        IF NOT(:OLD.Id != r_edicion.T) THEN
+            DELETE FROM TABLE(SELECT inscrito_en FROM Tabla_Amateur WHERE Id = r_edicion.E) T WHERE T.COLUMN_VALUE.Id = :OLD.Id; 
+        END IF;
+
+    END LOOP;
+END edicionConParticipanteA;
+/
+
+CREATE OR REPLACE TRIGGER edicionConParticipanteP BEFORE DELETE ON Tabla_Profesional
+FOR EACH ROW
+DECLARE
+    CURSOR existeParticipante IS SELECT V.COLUMN_VALUE.Id E FROM TABLE(SELECT inscrito_en FROM Tabla_Profesional WHERE Id = :OLD.Id) V;
+    PRAGMA AUTONOMOUS_TRANSACTION;
+BEGIN
+    FOR r_edicion IN existeParticipante LOOP
+      
+        IF NOT(:OLD.Id != r_edicion.T) THEN
+            DELETE FROM TABLE(SELECT inscrito_en FROM Tabla_Profesional WHERE Id = r_edicion.E) T WHERE T.COLUMN_VALUE.Id = :OLD.Id; 
+        END IF;
+
+    END LOOP;
+END edicionConParticipanteP;
+/

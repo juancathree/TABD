@@ -1236,7 +1236,7 @@ public class Main
 			System.out.print("Introduzca su identificador de participante: ");
 			idPart = teclado.nextInt();
 			System.out.print("Introduzca su categoria: ");
-			tipoPart = teclado.nextInt();
+			tipoPart = teclado.nextLine();
 			
 			try
 			{
@@ -1278,7 +1278,7 @@ public class Main
 				System.out.print("Su opci�n: ");
 				try
 				{
-					opcionPart = teclado.nextInt();
+					opcionPar = teclado.nextInt();
 					opcionElegida = true;
 				}
 				catch(Exception e)
@@ -1288,12 +1288,12 @@ public class Main
 				}
 			}
 		
-			switch(opcionOrg)
+			switch(opcionPar)
 			{
 				case 1: verEdicionesDisponibles(); break;
 				case 2: verEdicionesParticipa(idPart, tipoPart); break;
 				case 3: dejarParticiparEdicion(idPart, tipoPart); break;
-				case 4; verDatosTorneo(); break;
+				case 4: verDatosTorneo(); break;
 				case 5: verDatosVideojuego(); break;
 				default: salir = true; break;
 			}
@@ -1411,10 +1411,10 @@ public class Main
 		rs = stmt.executeQuery("SELECT VALUE(V) FROM TABLE(SELECT Centrado_En FROM Tabla_Torneo where Id = " +idTorneo + ") V");
 		Ref refVideo = (Ref) rs.getObject(1);
 		Struct video = (Struct) refVideo.getObject();
-		String idVideo = videeo.getAttributes()[0].toString();
+		String idVideo = video.getAttributes()[0].toString();
 		String titulo = video.getAttributes()[1].toString();
-		Int precio = video.getAttributes()[2].toString();
-		Int anio = video.getAttributes()[3].toString();
+		String precio = video.getAttributes()[2].toString();
+		String anio = video.getAttributes()[3].toString();
 		System.out.println(idVideo + "-. " + titulo + " " + precio + " " + anio);
 		rs.close();
 		stmt.close();
