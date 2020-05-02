@@ -13,8 +13,7 @@ DROP TYPE lista_ref_participantes FORCE;
 DROP TYPE lista_ref_organizadores FORCE;
 
 DROP TABLE Tabla_Videojuego FORCE;
-DROP TABLE Tabla_Amateur FORCE;
-DROP TABLE Tabla_Profesional FORCE;
+DROP TABLE Tabla_Participante FORCE;
 DROP TABLE Tabla_Organizador FORCE;
 DROP TABLE Tabla_Torneo FORCE;
 DROP TABLE Tabla_Edicion FORCE;
@@ -22,6 +21,7 @@ DROP SEQUENCE seqVideojuego;
 DROP SEQUENCE seqOrganizador;
 DROP SEQUENCE seqTorneo;
 DROP SEQUENCE seqEdicion;
+DROP SEQUENCE seqParticipante;
 DROP PACKAGE funcionesVideojuego;
 DROP PACKAGE funcionesOrganizador;
 DROP PACKAGE funcionesTorneo;

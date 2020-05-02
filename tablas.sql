@@ -7,22 +7,14 @@ CREATE TABLE Tabla_Videojuego OF Videojuego
 );
 show errors;
 
-/* Tabla Amateur */
-CREATE TABLE Tabla_Amateur OF Amateur
-(
-    CONSTRAINT PK_Tabla_Amateur PRIMARY KEY(Id),
-    CONSTRAINT AK_Tabla_Amateur UNIQUE(Dni)
-)
-NESTED TABLE Inscrito_En STORE AS Lista_Ediciones_Amateur;
-show errors;
+/* Tabla Participante */
 
-/* Tabla Profesional */
-CREATE TABLE Tabla_Profesional OF Profesional
+CREATE TABLE Tabla_Participante OF Participante
 (
-    CONSTRAINT PK_Tabla_Profesional PRIMARY KEY(Id),
-    CONSTRAINT AK_Tabla_Profesional UNIQUE(Dni)
+    CONSTRAINT PK_Tabla_Participante PRIMARY KEY(Id),
+    CONSTRAINT AK_Tabla_Participante UNIQUE(Dni)
 )
-NESTED TABLE Inscrito_En STORE AS Lista_Ediciones_Profesional;
+NESTED TABLE Inscrito_En STORE AS Lista_Ediciones_Participante;
 show errors;
 
 /* Tabla Organizador */

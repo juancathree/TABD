@@ -120,7 +120,15 @@ CREATE OR REPLACE PACKAGE BODY funcionesOrganizador AS
     END;
 
     PROCEDURE Delete_Organizador(Cod IN NUMBER) IS
+        CURSOR edicionesDelOrganizador IS 
+        SELECT V.COLUMN_VALUE.Id E FROM TABLE(SELECT organiza FROM tabla_organizador WHERE Id = Cod) V;
     BEGIN
+
+        FOR r_edicion IN edicionesDelOrganizador LOOP
+            DELETE FROM TABLE(SELECT Organizada_Por FROM Tabla_Edicion WHERE Id = r_edicion.E) T
+            WHERE T.COLUMN_VALUE.Id = Cod;
+        END LOOP;
+
         DELETE FROM Tabla_Organizador WHERE Id = Cod;
         EXCEPTION
         WHEN NO_DATA_FOUND THEN
@@ -141,7 +149,9 @@ CREATE OR REPLACE PACKAGE funcionesEdicion AS
     PROCEDURE Add_Edicion(numOrg IN NUMBER, cod IN NUMBER, ini IN DATE, fin IN DATE);
     PROCEDURE Delete_Edicion(Cod IN NUMBER);
     PROCEDURE Add_Organizador_Edicion(cod IN NUMBER, codOrg IN NUMBER);
+    PROCEDURE Add_Participante_Edicion(codEd IN NUMBER, codPar IN NUMBER);
     PROCEDURE Delete_Organizador_Edicion(cod IN NUMBER, codOrg IN NUMBER);
+    PROCEDURE Delete_Participante_Edicion(codEd IN NUMBER, codPar IN NUMBER);
     PROCEDURE Update_Edicion(codEdicion IN NUMBER, codTorneo IN NUMBER, ini IN DATE, fi IN DATE);
 END funcionesEdicion;
 /
@@ -187,7 +197,26 @@ CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
 
 
     PROCEDURE Delete_Edicion(Cod IN NUMBER) IS
+        IdTorneo NUMBER;
+        CURSOR participantesEdicion IS SELECT V.COLUMN_VALUE.Id P FROM TABLE(SELECT Participan 
+        FROM Tabla_Edicion WHERE Id = Cod) V;
+        CURSOR organizadoresEdicion IS SELECT V.COLUMN_VALUE.Id O FROM TABLE(SELECT Organizada_Por
+        FROM Tabla_Edicion WHERE Id = Cod) V;
     BEGIN
+
+        SELECT DEREF(Pertenece_A).Id INTO IdTorneo FROM Tabla_Edicion WHERE Id = Cod;
+        DELETE FROM TABLE(SELECT Tiene_Ediciones FROM Tabla_Torneo WHERE Id=IdTorneo) T WHERE T.COLUMN_VALUE.Id = Cod;  
+
+        FOR r_participante IN participantesEdicion LOOP /* por cada participante, borrar la referencia a edición*/
+            DELETE FROM TABLE(SELECT Inscrito_En FROM Tabla_Participante WHERE Id = r_participante.P) T
+            WHERE T.COLUMN_VALUE.Id = Cod;
+        END LOOP;
+
+        FOR r_organizador IN organizadoresEdicion LOOP /* por cada organizador, borrar la referencia a edición*/
+            DELETE FROM TABLE(SELECT Organiza FROM Tabla_Organizador WHERE Id = r_organizador.O) T
+            WHERE T.COLUMN_VALUE.Id = Cod;
+        END LOOP;
+
         DELETE FROM Tabla_Edicion WHERE Id=Cod; /*añadir trigger para borrar referencia en Torneo, Organizador y Participante*/
     END;
 
@@ -217,11 +246,52 @@ CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
         INSERT INTO TABLE(SELECT Organizada_Por FROM Tabla_Edicion WHERE Id = cod) VALUES(refOrganizador);
     END;
 
+    PROCEDURE Add_Participante_Edicion(codEd IN NUMBER, codPar IN NUMBER) IS
+        refParticipante REF Participante;
+        refEdicion REF Edicion;
+        yaEnEdicion NUMBER;
+        cupoMaximo NUMBER;
+        participanteEnEdicionException EXCEPTION;
+        cupoMaximoException EXCEPTION;
+    BEGIN
+        BEGIN
+            SELECT REF(E) INTO refEdicion FROM Tabla_Edicion E WHERE Id = codEd;
+            SELECT REF(P) INTO refParticipante FROM Tabla_Participante P WHERE Id = codPar;
+            SELECT COUNT(*) INTO yaEnEdicion FROM TABLE(SELECT Participan FROM Tabla_Edicion WHERE Id = CodEd) T
+            WHERE T.COLUMN_VALUE.Id = codPar;
+            SELECT COUNT(*) INTO cupoMaximo FROM TABLE(SELECT Participan FROM Tabla_Edicion WHERE Id = CodEd);
+
+            IF yaEnEdicion != 0 THEN
+                RAISE participanteEnEdicionException;
+            END IF;
+
+            IF NOT(cupoMaximo != 100) THEN
+                RAISE cupoMaximoException;
+            END IF;
+
+        EXCEPTION
+            WHEN participanteEnEdicionException THEN
+                RAISE_APPLICATION_ERROR(-20015, 'Este participante ya se encuentra en la edicion');
+            WHEN cupoMaximoException THEN
+                RAISE_APPLICATION_ERROR(-20016, 'Se ha alcanzado el cupo máximo en esta edicion (100)');    
+        END;
+
+        INSERT INTO TABLE(SELECT Inscrito_En FROM Tabla_Participante WHERE Id = codPar) VALUES(refEdicion);
+        INSERT INTO TABLE(SELECT Participan FROM Tabla_Edicion WHERE Id = codEd) VALUES(refParticipante);
+    END;
+
 
     PROCEDURE Delete_Organizador_Edicion(cod IN NUMBER, codOrg IN NUMBER) IS
     BEGIN
         DELETE FROM TABLE(SELECT Organizada_Por FROM Tabla_Edicion WHERE Id=cod) T WHERE T.COLUMN_VALUE.Id=codOrg;
         DELETE FROM TABLE(SELECT Organiza FROM Tabla_Organizador WHERE Id=codOrg) T WHERE T.COLUMN_VALUE.Id=cod;
+    END;
+
+
+    PROCEDURE Delete_Participante_Edicion(codEd IN NUMBER, codPar IN NUMBER) IS
+    BEGIN
+        DELETE FROM TABLE(SELECT Participan FROM Tabla_Edicion WHERE Id = codEd) T WHERE T.COLUMN_VALUE.Id=codPar;
+        DELETE FROM TABLE(SELECT Inscrito_En FROM Tabla_Participante WHERE Id = codPar) T WHERE T.COLUMN_VALUE.Id=codEd;
     END;
 
 
@@ -248,28 +318,42 @@ CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
 
 END funcionesEdicion;
 /
+show errors;
 
 CREATE OR REPLACE PACKAGE funcionesParticipante AS
-    PROCEDURE Remove_Participation(idPart IN NUMBER, tipoPart IN VARCHAR, idEdicion in NUMBER);
+    PROCEDURE Add_Amateur(Nombre IN VARCHAR, Apellidos IN VARCHAR, Nacimiento IN DATE, Dni IN VARCHAR,
+    Domicilio IN VARCHAR, Email IN VARCHAR, nombreFotografia IN VARCHAR);
+    PROCEDURE Add_Profesional(Nombre IN VARCHAR, Apellidos IN VARCHAR, Nacimiento IN DATE, Dni IN VARCHAR,
+    Domicilio IN VARCHAR, Email IN VARCHAR, nombreCurriculum IN VARCHAR);
+    PROCEDURE Update_Participante(Cod IN VARCHAR, Nom IN VARCHAR, Apell IN VARCHAR, Nac IN DATE, NIF IN VARCHAR,
+    Dom IN VARCHAR, Correo IN VARCHAR);
+
 END funcionesParticipante;
 /
 
-CREATE OR REPLACE PACKAGE BODY funcionesEdicion AS
 
-    PROCEDURE Remove_Participation(idPart IN NUMBER, tipoPart IN VARCHAR, idEdicion in NUMBER) AS
+CREATE OR REPLACE PACKAGE BODY funcionesParticipante AS
+
+    PROCEDURE Add_Amateur(Nombre IN VARCHAR, Apellidos IN VARCHAR, Nacimiento IN DATE, Dni IN VARCHAR,
+    Domicilio IN VARCHAR, Email IN VARCHAR, nombreFotografia IN VARCHAR) IS
     BEGIN
-        IF tipoPart == "amateur" THEN
-            DELETE FROM TABLE(SELECT Inscrito_En FROM Tabla_Amateur WHERE Id=idPart) T WHERE T.COLUMN_VALUE.Id=idEdicion;
-        ELSIF tipoPart == "profesional" THEN
-            DELETE FROM TABLE(SELECT Inscrito_En FROM Tabla_Profesional WHERE Id=idPart) T WHERE T.COLUMN_VALUE.Id=idEdicion;
-        ELSE
-            RAISE categoriaIncorrecta;
-        END IF;
-    EXCEPTION
-        WHEN categoriaIncorrecta THEN
-            RAISE_APPLICATION_ERROR(-20010, 'Esta categoria de partipante no existe');
+        INSERT INTO Tabla_Participante VALUES(Amateur(seqParticipante.NEXTVAL, Nombre, Apellidos, Dni,
+        Nacimiento, Domicilio, Email, Lista_Ref_Ediciones(), EMPTY_BLOB()));
     END;
 
+    PROCEDURE Add_Profesional(Nombre IN VARCHAR, Apellidos IN VARCHAR, Nacimiento IN DATE, Dni IN VARCHAR,
+    Domicilio IN VARCHAR, Email IN VARCHAR, nombreCurriculum IN VARCHAR) IS
+    BEGIN
+        INSERT INTO Tabla_Participante VALUES(Profesional(seqParticipante.NEXTVAL, Nombre, Apellidos,
+        Dni, Nacimiento, Domicilio, Email, Lista_Ref_Ediciones(), EMPTY_CLOB()));
+    END;
+
+    PROCEDURE Update_Participante(Cod IN VARCHAR, Nom IN VARCHAR, Apell IN VARCHAR, Nac IN DATE, NIF IN VARCHAR,
+    Dom IN VARCHAR, Correo IN VARCHAR) IS
+    BEGIN
+        UPDATE Tabla_Participante SET Nombre=Nom, Apellidos = Apell, Nacimiento = Nac, Dni = NIF,
+        Domicilio = Dom, Email = Correo WHERE Id = Cod;
+    END;
 
 END funcionesParticipante;
 /

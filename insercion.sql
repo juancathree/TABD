@@ -15,3 +15,15 @@ TO_DATE('1990-10-12','YYYY-MM-DD'), '22334455J',Lista_Ref_Ediciones());
 INSERT INTO Tabla_Organizador VALUES(seqOrganizador.NEXTVAL, 'Francisco Jose', 'Ortega Perez',
 TO_DATE('1995-07-04','YYYY-MM-DD'), '33445566R',Lista_Ref_Ediciones());
 
+/* INSERCIÓN DE PARTICIPANTES */
+INSERT INTO Tabla_Participante VALUES(Amateur(seqParticipante.NEXTVAL, 'Antonio', 'Gonzalez Urbano',
+'66776644W', TO_DATE('1996-05-23', 'YYYY-MM-DD'), 'C/ Real nº 4', 'antonio@gmail.com', 
+Lista_Ref_Ediciones(), EMPTY_BLOB()));
+
+INSERT INTO Tabla_Participante VALUES(Amateur(seqParticipante.NEXTVAL, 'Diana', 'Mendoza Gomez',
+'3344444Z', TO_DATE('1989-12-03', 'YYYY-MM-DD'), 'C/ Puente nº 2', 'diana@gmail.com', 
+Lista_Ref_Ediciones(), EMPTY_BLOB()));
+
+INSERT INTO Tabla_Participante VALUES(Profesional(seqParticipante.NEXTVAL, 'Sara', 'Diaz Perez',
+'99999477K', TO_DATE('1999-03-12', 'YYYY-MM-DD'), 'C/ Gardenia nº 5', 'sara@gmail.com', 
+Lista_Ref_Ediciones(), EMPTY_BLOB()));
