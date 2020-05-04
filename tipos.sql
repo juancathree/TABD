@@ -130,7 +130,7 @@ CREATE OR REPLACE TYPE Torneo AS OBJECT
     /* Declaración de atributos */
     Id NUMBER(5),
     Titulo VARCHAR(32),
-    Reglas CLOB,
+    Reglas BLOB,
 
     /* Declaración de asociaciones */
     Centrado_En REF Videojuego,

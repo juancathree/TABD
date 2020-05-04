@@ -39,7 +39,3 @@ BEGIN
     
 END organizadorUnico;
 /
-
-
-/* Disparador para eliminar todas las ediciones de un torneo cuando este se vaya a eliminar */
-/*CREATE OR REPLACE TRIGGER borrarEdicionesDeTorneo BEFORE DELETE */

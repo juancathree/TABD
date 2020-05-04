@@ -1474,12 +1474,22 @@ public class Main
 		ResultSet rs = stmt.executeQuery("SELECT * FROM Tabla_Edicion");
 		while(rs.next())
 		{
+			Statement stmt2 = DataHandler.conn.createStatement();
+			ResultSet rs2 = stmt2.executeQuery("SELECT COUNT(*) FROM TABLE(SELECT Participan FROM "
+					+ "Tabla_Edicion WHERE Id = " + rs.getObject(1) + ")"); 
+			rs2.next();
+			
 			Ref refTorneo = (Ref) rs.getObject(6);
 			Struct torneo = (Struct) refTorneo.getObject();
 			String nombreTorneo = torneo.getAttributes()[1].toString();
 			System.out.println(rs.getInt("Id") + "-. " + nombreTorneo + ": entre el " + rs.getDate("Inicio")
-			+ " y el " + rs.getDate("Fin"));
+			+ " y el " + rs.getDate("Fin") + ". Participantes inscritos: " + rs2.getInt(1));
+			
+			stmt2.close();
+			rs2.close();
 		}
+		stmt.close();
+		rs.close();
 		
 		
 		boolean salir = false;
